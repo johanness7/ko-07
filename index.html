@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ko-07</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #FF5500;
+            --primary-hover: #E04B00;
+            --primary-light: #FFF0EB;
+            --bg-color: #F4F5F7;
+            --card-bg: #FFFFFF;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --shadow-lg: 0 20px 30px -10px rgba(255, 85, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
+            --shadow-pop: 0 25px 50px -12px rgba(255, 85, 0, 0.3);
+            --radius-xl: 24px;
+            --radius-md: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .glow-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(255, 85, 0, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(255, 120, 0, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .intro-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF0EB 50%, #FFD2C1 100%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: introFadeOut 0.4s ease-in-out 1s forwards;
+        }
+
+        .intro-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: introPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .intro-logo img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+        }
+
+        .intro-logo span {
+            font-size: 26px;
+            font-weight: 800;
+            color: #000000;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes introPop {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes introFadeOut {
+            to { opacity: 0; visibility: hidden; pointer-events: none; }
+        }
+
+        header {
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .header-logo-img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: #000000;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .user-profile {
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-light);
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background: #FFE4D6;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            padding: 20px 32px 24px;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            height: calc(100vh - 73px);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            flex-shrink: 0;
+        }
+
+        .sidebar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .history-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .project-group {
+            border-left: 3px solid var(--primary);
+            padding-left: 6px;
+            margin-bottom: 10px;
+        }
+
+        .project-header {
+            position: relative;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: var(--bg-color);
+            border-radius: 10px;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .project-header:hover {
+            background: var(--primary-light);
+        }
+
+        .project-title-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .project-title-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .project-actions {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .project-chats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 6px;
+            padding-left: 4px;
+        }
+
+        .project-chats-container.collapsed {
+            display: none;
+        }
+
+        .history-item {
+            position: relative;
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            background: var(--bg-color);
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .history-item:hover, .history-item.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .history-title-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .history-options-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 4px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            opacity: 0.6;
+        }
+
+        .history-options-btn:hover {
+            opacity: 1;
+            color: var(--primary);
+            background: rgba(255, 85, 0, 0.1);
+        }
+
+        .chat-dropdown {
+            position: absolute;
+            right: 0;
+            top: 32px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-pop);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            width: 140px;
+        }
+
+        .chat-dropdown.active {
+            display: flex;
+        }
+
+        .dropdown-item {
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: white;
+            border: none;
+            text-align: left;
+            width: 100%;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-color);
+        }
+
+        .dropdown-item.delete {
+            color: #DC2626;
+        }
+
+        .dropdown-item.delete:hover {
+            background: #FEE2E2;
+        }
+
+        .chat-container {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .message {
+            display: flex;
+            gap: 16px;
+            max-width: 85%;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+
+        .message.bot .avatar {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3);
+        }
+
+        .message.user .avatar {
+            background: var(--text-main);
+            color: white;
+        }
+
+        .bubble {
+            padding: 18px 24px;
+            border-radius: 22px;
+            font-size: 16px;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .loading-bubble-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .loader-logo-img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .bubble p { margin-bottom: 12px; }
+        .bubble p:last-child { margin-bottom: 0; }
+        .bubble strong { font-weight: 700; }
+        .bubble ul, .bubble ol { margin-left: 20px; margin-bottom: 12px; }
+        .bubble code {
+            background: rgba(0, 0, 0, 0.06);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .message.bot .bubble {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border-top-left-radius: 4px;
+        }
+
+        .message.user .bubble {
+            background: var(--primary);
+            color: white;
+            border-top-right-radius: 4px;
+        }
+
+        .empty-state {
+            margin: auto;
+            text-align: center;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .chat-loader {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .chat-loader.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .chat-input-area {
+            padding: 24px 32px;
+            background: #FFFFFF;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid var(--border-color);
+            background: var(--bg-color);
+            padding: 18px 24px;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.15);
+        }
+
+        .btn {
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 14px 24px;
+            font-size: 15px;
+            box-shadow: 0 6px 20px rgba(255, 85, 0, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 85, 0, 0.45);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-main);
+            border: 2px solid var(--border-color);
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 36px;
+            border-radius: var(--radius-xl);
+            max-width: 440px;
+            width: 90%;
+            box-shadow: var(--shadow-pop);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .modal-input:focus {
+            border-color: var(--primary);
+        }
+
+        .modal-error {
+            color: #DC2626;
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: none;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="intro-screen">
+        <div class="intro-logo">
+            <img src="logo.png" alt="Logo">
+            <span>ko-07</span>
+        </div>
+    </div>
+
+    <div class="glow-bg"></div>
+
+    <header>
+        <div class="logo" onclick="startNewChat()">
+            <img src="logo.png" alt="Logo" class="header-logo-img">
+            <span class="logo-text">ko-07</span>
+        </div>
+        <div class="auth-buttons" id="authContainer">
+            <button class="btn btn-secondary" onclick="openAuthModal('login')">Einloggen</button>
+            <button class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;" onclick="openAuthModal('register')">Registrieren</button>
+        </div>
+    </header>
+
+    <main>
+        <aside class="sidebar">
+            <div class="sidebar-actions">
+                <button class="btn btn-secondary" style="width: 100%;" onclick="openProjectModal()">
+                    <i data-lucide="folder-plus"></i> Neues Projekt
+                </button>
+                <button class="btn btn-primary" style="width: 100%;" onclick="startNewChat()">
+                    <i data-lucide="plus"></i> Neuer Chat
+                </button>
+            </div>
+            <div class="history-title">Chat-Verlauf & Projekte</div>
+            <div class="history-list" id="historyList"></div>
+        </aside>
+
+        <section class="chat-container">
+            <div class="chat-loader" id="chatLoader">
+                <div class="spinner"></div>
+            </div>
+
+            <div class="chat-messages" id="chatBox"></div>
+
+            <div class="chat-input-area">
+                <input type="text" id="userInput" class="chat-input" placeholder="Schreibe eine Nachricht..." onkeypress="handleKeyPress(event)" autofocus>
+                <button class="btn btn-primary" onclick="sendMessage()">
+                    <span>Senden</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="projectModal" onclick="handleOutsideModalClick(event, 'projectModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 20px;" id="projectModalTitle">Neues Projekt</h2>
+            <input type="text" id="projectNameInput" placeholder="Projektname" class="modal-input">
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveProject()">Erstellen</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('projectModal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="deleteProjectModal" onclick="handleOutsideModalClick(event, 'deleteProjectModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 12px;">Projekt löschen?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Das Projekt wird gelöscht. Die enthaltenen Chats bleiben im normalen Verlauf erhalten.</p>
+            <button class="btn btn-primary" style="width: 100%; background: #DC2626;" onclick="submitDeleteProject()">Löschen</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('deleteProjectModal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="accountModal" onclick="handleOutsideModalClick(event, 'accountModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 20px;">Account-Einstellungen</h2>
+            <div class="modal-error" id="accountError"></div>
+            
+            <label style="display:block; text-align:left; font-size:12px; font-weight:700; margin-bottom:4px; color:var(--text-muted);">BENUTZERNAME</label>
+            <input type="text" id="accUsernameInput" placeholder="Neuer Benutzername" class="modal-input">
+            
+            <label style="display:block; text-align:left; font-size:12px; font-weight:700; margin-bottom:4px; color:var(--text-muted);">NEUES PASSWORT</label>
+            <input type="password" id="accPasswordInput" placeholder="Neues Passwort (optional)" class="modal-input">
+            
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveAccountSettings()">Speichern</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('accountModal')">Abbrechen</button>
+            
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);">
+            <button class="btn btn-primary" style="width: 100%; background: #DC2626;" onclick="openDeleteAccountModal()">Account löschen</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="deleteAccountModal" onclick="handleOutsideModalClick(event, 'deleteAccountModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 12px; color: #DC2626;">Account löschen?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Bist du absolut sicher? Alle deine Daten und Chats werden unwiderruflich gelöscht!</p>
+            <button class="btn btn-primary" style="width: 100%; background: #DC2626;" onclick="confirmDeleteAccount()">Ja, Account unwiderruflich löschen</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('deleteAccountModal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="authModal" onclick="handleOutsideModalClick(event, 'authModal')">
+        <div class="modal-card">
+            <h2 id="modalTitle" style="margin-bottom: 20px;">Einloggen</h2>
+            <div class="modal-error" id="authError"></div>
+            <input type="text" id="authUsername" placeholder="Benutzername" class="modal-input">
+            <input type="password" id="authPassword" placeholder="Passwort" class="modal-input">
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="handleAuthSubmit()">Weiter</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('authModal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="renameModal" onclick="handleOutsideModalClick(event, 'renameModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 20px;">Chat umbenennen</h2>
+            <input type="text" id="renameInput" placeholder="Neuer Name" class="modal-input">
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="submitRename()">Speichern</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('renameModal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="deleteModal" onclick="handleOutsideModalClick(event, 'deleteModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 12px;">Chat löschen?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Möchtest du diesen Chat wirklich dauerhaft entfernen?</p>
+            <button class="btn btn-primary" style="width: 100%; background: #DC2626;" onclick="submitDelete()">Löschen</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('deleteModal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="logoutModal" onclick="handleOutsideModalClick(event, 'logoutModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 12px;">Möchtest du dich abmelden?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Deine verknüpften Chats sind nach dem Abmelden ausgeblendet.</p>
+            <button class="btn btn-primary" style="width: 100%; background: #DC2626;" onclick="confirmLogout()">Abmelden</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('logoutModal')">Abbrechen</button>
+        </div>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.run/@google/genai"
+        }
+      }
+    </script>
+
+    <script type="module">
+        import { GoogleGenAI } from "@google/genai";
+
+        lucide.createIcons();
+
+        const API_KEY = "DEIN_NEUER_API_KEY"; 
+        
+        let ai;
+        try {
+            if (API_KEY && API_KEY !== "DEIN_NEUER_API_KEY") {
+                ai = new GoogleGenAI({ apiKey: API_KEY });
+            }
+        } catch (e) {
+            console.error("API Init Error:", e);
+        }
+
+        const SYSTEM_INSTRUCTION = "Du bist eine hochentwickelte, moderne KI. Antworte ausführlich, sehr detailliert und tiefgehend. Nutze viele Absätze, Aufzählungen und passende Emojis (🚀, 💡, 🔥, ✨ etc.), um deine Antworten übersichtlich und lebendig zu gestalten.";
+
+        let currentUser = localStorage.getItem('ko07_user') || null;
+        let chats = getAccountData('chats');
+        let projects = getAccountData('projects');
+        let currentChatId = null; 
+        let currentProjectId = null;
+        let authMode = 'login';
+        let targetChatId = null;
+        let targetProjectId = null;
+
+        function getAccountData(type) {
+            const key = currentUser ? `ko07_${type}_${currentUser}` : `ko07_${type}_guest`;
+            return JSON.parse(localStorage.getItem(key)) || [];
+        }
+
+        function saveAccountData(type, data) {
+            const key = currentUser ? `ko07_${type}_${currentUser}` : `ko07_${type}_guest`;
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function saveAll() {
+            saveAccountData('chats', chats);
+            saveAccountData('projects', projects);
+            renderHistory();
+        }
+
+        function triggerLoader() {
+            const loader = document.getElementById('chatLoader');
+            loader.classList.add('active');
+            setTimeout(() => loader.classList.remove('active'), 1000);
+        }
+
+        function initApp() {
+            updateAuthHeader();
+            renderHistory();
+            startNewChat();
+        }
+
+        window.sendMessage = async function() {
+            const input = document.getElementById('userInput');
+            const messageText = input.value.trim();
+            
+            if (messageText === "") return;
+
+            if (!currentChatId) {
+                currentChatId = Date.now();
+                chats.unshift({ 
+                    id: currentChatId, 
+                    title: messageText.substring(0, 22) + "...", 
+                    projectId: currentProjectId,
+                    messages: [] 
+                });
+            }
+
+            const currentChat = chats.find(c => c.id === currentChatId);
+            currentChat.messages.push({ sender: 'user', text: messageText });
+            saveAll();
+            renderMessages();
+
+            input.value = '';
+            showLoadingBubble();
+
+            try {
+                if (!ai) throw new Error("Bitte trage deinen API-Key oben im JavaScript-Code ein.");
+
+                const response = await ai.models.generateContent({
+                    model: 'gemini-3.6-flash',
+                    contents: messageText,
+                    config: { systemInstruction: SYSTEM_INSTRUCTION }
+                });
+
+                removeLoadingBubble();
+                currentChat.messages.push({ sender: 'bot', text: response.text });
+                saveAll();
+                renderMessages();
+
+            } catch (error) {
+                console.error(error);
+                removeLoadingBubble();
+                currentChat.messages.push({ sender: 'bot', text: `Fehler: ${error.message}`, error: true });
+                saveAll();
+                renderMessages();
+            }
+
+            input.focus();
+        };
+
+        window.startNewChat = function(projectId = null) {
+            currentChatId = null;
+            currentProjectId = projectId;
+            triggerLoader();
+            renderHistory();
+            renderMessages();
+            document.getElementById('userInput').focus();
+        };
+
+        function renderMessages() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = '';
+
+            const currentChat = chats.find(c => c.id === currentChatId);
+
+            if (!currentChat || currentChat.messages.length === 0) {
+                chatBox.innerHTML = `<div class="empty-state">Stelle eine Frage, um den Chat zu starten. 🚀</div>`;
+                return;
+            }
+
+            currentChat.messages.forEach(msg => {
+                const msgEl = document.createElement('div');
+                msgEl.className = `message ${msg.sender}`;
+                const bgStyle = msg.error ? 'style="background: #FEE2E2; color: #991B1B;"' : '';
+                
+                const formattedContent = msg.sender === 'bot' && !msg.error 
+                    ? marked.parse(msg.text) 
+                    : `<p>${escapeHTML(msg.text)}</p>`;
+
+                msgEl.innerHTML = `
+                    <div class="avatar">${msg.sender === 'bot' ? '07' : 'DU'}</div>
+                    <div class="bubble" ${bgStyle}>${formattedContent}</div>
+                `;
+                chatBox.appendChild(msgEl);
+            });
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+
+            // Render Projects
+            projects.forEach(proj => {
+                const projEl = document.createElement('div');
+                projEl.className = 'project-group';
+                
+                const projChats = chats.filter(c => c.projectId === proj.id);
+                const isCollapsed = proj.collapsed || false;
+                
+                projEl.innerHTML = `
+                    <div class="project-header">
+                        <div class="project-title-area" onclick="toggleProjectCollapse(${proj.id})">
+                            <i data-lucide="${isCollapsed ? 'chevron-right' : 'chevron-down'}" style="width:16px; height:16px;"></i>
+                            <span class="project-title-text">📁 ${escapeHTML(proj.name)}</span>
+                        </div>
+                        <div class="project-actions">
+                            <button class="history-options-btn" title="Neuer Chat in Projekt" onclick="event.stopPropagation(); startNewChat(${proj.id})">
+                                <i data-lucide="plus"></i>
+                            </button>
+                            <button class="history-options-btn project-opt-btn" onclick="event.stopPropagation(); toggleDropdown('proj-dropdown-${proj.id}')">
+                                <i data-lucide="more-vertical"></i>
+                            </button>
+                            <div class="chat-dropdown" id="proj-dropdown-${proj.id}">
+                                <button class="dropdown-item" onclick="event.stopPropagation(); openProjectModal(${proj.id})">
+                                    <i data-lucide="edit-2"></i> Umbenennen
+                                </button>
+                                <button class="dropdown-item delete" onclick="event.stopPropagation(); openDeleteProjectModal(${proj.id})">
+                                    <i data-lucide="trash-2"></i> Löschen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-chats-container ${isCollapsed ? 'collapsed' : ''}"></div>
+                `;
+
+                const chatsContainer = projEl.querySelector('.project-chats-container');
+                projChats.forEach(chat => {
+                    chatsContainer.appendChild(createChatItem(chat));
+                });
+
+                historyList.appendChild(projEl);
+            });
+
+            // Standalone Chats
+            const standaloneChats = chats.filter(c => !c.projectId);
+            standaloneChats.forEach(chat => {
+                historyList.appendChild(createChatItem(chat));
+            });
+
+            lucide.createIcons();
+        }
+
+        function createChatItem(chat) {
+            const item = document.createElement('div');
+            item.className = `history-item ${chat.id === currentChatId ? 'active' : ''}`;
+            
+            item.innerHTML = `
+                <div class="history-title-text">${escapeHTML(chat.title)}</div>
+                <button class="history-options-btn"><i data-lucide="more-vertical"></i></button>
+                <div class="chat-dropdown" id="dropdown-${chat.id}">
+                    <button class="dropdown-item rename-btn"><i data-lucide="edit-2"></i> Umbenennen</button>
+                    <button class="dropdown-item delete delete-btn"><i data-lucide="trash-2"></i> Löschen</button>
+                </div>
+            `;
+
+            item.onclick = (e) => {
+                if (!e.target.closest('.history-options-btn') && !e.target.closest('.chat-dropdown')) {
+                    loadChat(chat.id);
+                }
+            };
+
+            item.querySelector('.history-options-btn').onclick = (e) => {
+                e.stopPropagation();
+                toggleDropdown(`dropdown-${chat.id}`);
+            };
+
+            item.querySelector('.rename-btn').onclick = (e) => {
+                e.stopPropagation();
+                openRenameModal(chat.id);
+            };
+
+            item.querySelector('.delete-btn').onclick = (e) => {
+                e.stopPropagation();
+                openDeleteModal(chat.id);
+            };
+
+            return item;
+        }
+
+        window.toggleProjectCollapse = function(projId) {
+            const proj = projects.find(p => p.id === projId);
+            if (proj) {
+                proj.collapsed = !proj.collapsed;
+                saveAll();
+            }
+        };
+
+        window.openProjectModal = function(projId = null) {
+            targetProjectId = projId;
+            const titleEl = document.getElementById('projectModalTitle');
+            const input = document.getElementById('projectNameInput');
+
+            if (projId) {
+                const proj = projects.find(p => p.id === projId);
+                titleEl.innerText = "Projekt umbenennen";
+                input.value = proj ? proj.name : '';
+            } else {
+                titleEl.innerText = "Neues Projekt";
+                input.value = '';
+            }
+            document.getElementById('projectModal').classList.add('active');
+        };
+
+        window.saveProject = function() {
+            const name = document.getElementById('projectNameInput').value.trim();
+            if (!name) return;
+
+            if (targetProjectId) {
+                const proj = projects.find(p => p.id === targetProjectId);
+                if (proj) proj.name = name;
+            } else {
+                projects.push({ id: Date.now(), name, collapsed: false });
+            }
+
+            saveAll();
+            closeModal('projectModal');
+        };
+
+        window.openDeleteProjectModal = function(projId) {
+            targetProjectId = projId;
+            document.getElementById('deleteProjectModal').classList.add('active');
+        };
+
+        window.submitDeleteProject = function() {
+            if (targetProjectId) {
+                projects = projects.filter(p => p.id !== targetProjectId);
+                chats.forEach(c => {
+                    if (c.projectId === targetProjectId) c.projectId = null;
+                });
+                saveAll();
+                closeModal('deleteProjectModal');
+            }
+        };
+
+        window.openAccountModal = function() {
+            if (!currentUser) return;
+            document.getElementById('accUsernameInput').value = currentUser;
+            document.getElementById('accPasswordInput').value = '';
+            document.getElementById('accountError').style.display = 'none';
+            document.getElementById('accountModal').classList.add('active');
+        };
+
+        window.saveAccountSettings = function() {
+            const newName = document.getElementById('accUsernameInput').value.trim();
+            const newPass = document.getElementById('accPasswordInput').value.trim();
+            const errorEl = document.getElementById('accountError');
+
+            if (!newName) {
+                errorEl.innerText = "Benutzername darf nicht leer sein.";
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('ko07_registered_users')) || {};
+
+            if (newName !== currentUser && users[newName]) {
+                errorEl.innerText = "Benutzername ist bereits vergeben.";
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            if (newName !== currentUser) {
+                const oldPass = users[currentUser];
+                delete users[currentUser];
+                users[newName] = newPass || oldPass;
+
+                localStorage.setItem(`ko07_chats_${newName}`, localStorage.getItem(`ko07_chats_${currentUser}`) || '[]');
+                localStorage.setItem(`ko07_projects_${newName}`, localStorage.getItem(`ko07_projects_${currentUser}`) || '[]');
+                localStorage.removeItem(`ko07_chats_${currentUser}`);
+                localStorage.removeItem(`ko07_projects_${currentUser}`);
+
+                currentUser = newName;
+                localStorage.setItem('ko07_user', currentUser);
+            } else if (newPass) {
+                users[currentUser] = newPass;
+            }
+
+            localStorage.setItem('ko07_registered_users', JSON.stringify(users));
+            updateAuthHeader();
+            closeModal('accountModal');
+        };
+
+        window.openDeleteAccountModal = function() {
+            closeModal('accountModal');
+            document.getElementById('deleteAccountModal').classList.add('active');
+        };
+
+        window.confirmDeleteAccount = function() {
+            const users = JSON.parse(localStorage.getItem('ko07_registered_users')) || {};
+            delete users[currentUser];
+            localStorage.setItem('ko07_registered_users', JSON.stringify(users));
+
+            localStorage.removeItem(`ko07_chats_${currentUser}`);
+            localStorage.removeItem(`ko07_projects_${currentUser}`);
+            localStorage.removeItem('ko07_user');
+
+            currentUser = null;
+            chats = [];
+            projects = [];
+
+            updateAuthHeader();
+            closeModal('deleteAccountModal');
+            startNewChat();
+        };
+
+        window.toggleDropdown = function(dropdownId) {
+            document.querySelectorAll('.chat-dropdown').forEach(el => {
+                if (el.id !== dropdownId) el.classList.remove('active');
+            });
+            const target = document.getElementById(dropdownId);
+            if (target) target.classList.toggle('active');
+        };
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.chat-dropdown').forEach(el => el.classList.remove('active'));
+        });
+
+        window.loadChat = function(id) {
+            currentChatId = id;
+            triggerLoader();
+            renderHistory();
+            renderMessages();
+            document.getElementById('userInput').focus();
+        };
+
+        function showLoadingBubble() {
+            const chatBox = document.getElementById('chatBox');
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'message bot';
+            loadingMsg.id = 'loading-bubble';
+            loadingMsg.innerHTML = `
+                <div class="avatar">07</div>
+                <div class="bubble">
+                    <div class="loading-bubble-content">
+                        <img src="logo.png" alt="Loading" class="loader-logo-img">
+                        <em>Denkt nach... ✨</em>
+                    </div>
+                </div>
+            `;
+            chatBox.appendChild(loadingMsg);
+        }
+
+        function removeLoadingBubble() {
+            const loader = document.getElementById('loading-bubble');
+            if (loader) loader.remove();
+        }
+
+        function openRenameModal(id) {
+            targetChatId = id;
+            const chat = chats.find(c => c.id === id);
+            if (chat) {
+                document.getElementById('renameInput').value = chat.title;
+                document.getElementById('renameModal').classList.add('active');
+            }
+        }
+
+        window.submitRename = function() {
+            const val = document.getElementById('renameInput').value.trim();
+            if (val && targetChatId) {
+                const chat = chats.find(c => c.id === targetChatId);
+                if (chat) chat.title = val;
+                saveAll();
+                closeModal('renameModal');
+            }
+        };
+
+        function openDeleteModal(id) {
+            targetChatId = id;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        window.submitDelete = function() {
+            if (targetChatId) {
+                chats = chats.filter(c => c.id !== targetChatId);
+                if (currentChatId === targetChatId) currentChatId = null;
+                saveAll();
+                renderMessages();
+                closeModal('deleteModal');
+            }
+        };
+
+        window.openAuthModal = function(type) {
+            authMode = type;
+            document.getElementById('modalTitle').innerText = type === 'login' ? 'Einloggen' : 'Konto erstellen';
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authUsername').value = '';
+            document.getElementById('authPassword').value = '';
+            document.getElementById('authModal').classList.add('active');
+        };
+
+        window.handleAuthSubmit = function() {
+            const username = document.getElementById('authUsername').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const errorEl = document.getElementById('authError');
+
+            if (!username || !password) {
+                errorEl.innerText = "Bitte fülle alle Felder aus.";
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('ko07_registered_users')) || {};
+
+            if (authMode === 'register') {
+                if (users[username]) {
+                    errorEl.innerText = "Benutzername ist bereits vergeben.";
+                    errorEl.style.display = 'block';
+                    return;
+                }
+                users[username] = password;
+                localStorage.setItem('ko07_registered_users', JSON.stringify(users));
+                currentUser = username;
+                localStorage.setItem('ko07_user', currentUser);
+                chats = getAccountData('chats');
+                projects = getAccountData('projects');
+                updateAuthHeader();
+                startNewChat();
+                closeModal('authModal');
+            } else {
+                if (!users[username] || users[username] !== password) {
+                    errorEl.innerText = "Ungültige Anmeldedaten.";
+                    errorEl.style.display = 'block';
+                    return;
+                }
+                currentUser = username;
+                localStorage.setItem('ko07_user', currentUser);
+                chats = getAccountData('chats');
+                projects = getAccountData('projects');
+                updateAuthHeader();
+                startNewChat();
+                closeModal('authModal');
+            }
+        };
+
+        window.logout = function() {
+            document.getElementById('logoutModal').classList.add('active');
+        };
+
+        window.confirmLogout = function() {
+            currentUser = null;
+            localStorage.removeItem('ko07_user');
+            chats = getAccountData('chats');
+            projects = getAccountData('projects');
+            updateAuthHeader();
+            startNewChat();
+            closeModal('logoutModal');
+        };
+
+        function updateAuthHeader() {
+            const container = document.getElementById('authContainer');
+            if (currentUser) {
+                container.innerHTML = `
+                    <div class="user-profile" onclick="openAccountModal()">
+                        <i data-lucide="user"></i> ${escapeHTML(currentUser)}
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">Abmelden</button>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button class="btn btn-secondary" onclick="openAuthModal('login')">Einloggen</button>
+                    <button class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;" onclick="openAuthModal('register')">Registrieren</button>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        window.closeModal = function(id) {
+            document.getElementById(id).classList.remove('active');
+        };
+
+        window.handleOutsideModalClick = function(event, modalId) {
+            if (event.target.id === modalId) {
+                closeModal(modalId);
+            }
+        };
+
+        window.handleKeyPress = function(e) {
+            if (e.key === 'Enter') window.sendMessage();
+        };
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
