@@ -56,7 +56,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; position: relative; transition: background-color 0.3s ease, color 0.3s ease; }
 
-        /* Banner ganz oben am Rand */
         .top-disclaimer-bar {
             width: 100%;
             background: var(--card-bg);
@@ -141,7 +140,6 @@
         .dropdown-item.delete { color: #DC2626; }
         .dropdown-item.delete:hover { background: rgba(220, 38, 38, 0.1); }
 
-        /* Sidebar Footer */
         .sidebar-footer { border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 12px; position: relative; }
         .profile-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: var(--radius-md); background: var(--bg-color); border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s ease; color: var(--text-main); }
         .profile-btn:hover { border-color: var(--primary); background: var(--primary-light); }
@@ -154,10 +152,7 @@
 
         .chat-container { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-xl); display: flex; flex-direction: column; box-shadow: var(--shadow-lg); overflow: hidden; position: relative; }
         
-        /* Visuelles Styling für temporäre Chats */
-        .chat-container.is-temp-mode {
-            border: 2px dashed var(--temp-accent);
-        }
+        .chat-container.is-temp-mode { border: 2px dashed var(--temp-accent); }
         
         .temp-notice-banner {
             display: none;
@@ -172,9 +167,7 @@
             justify-content: center;
             gap: 6px;
         }
-        .chat-container.is-temp-mode .temp-notice-banner {
-            display: flex;
-        }
+        .chat-container.is-temp-mode .temp-notice-banner { display: flex; }
 
         .chat-messages { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
 
@@ -184,7 +177,6 @@
         .avatar { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
         .message.bot .avatar { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3); }
         
-        /* Avatar im temporären Modus */
         .chat-container.is-temp-mode .message.bot .avatar {
             background: var(--temp-accent);
             box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
@@ -221,9 +213,7 @@
             animation: centerPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; background: var(--card-bg);
         }
         
-        .chat-container.initial-state.is-temp-mode .chat-input-wrapper {
-            border-color: var(--temp-accent);
-        }
+        .chat-container.initial-state.is-temp-mode .chat-input-wrapper { border-color: var(--temp-accent); }
 
         @keyframes centerPop {
             0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); }
@@ -235,7 +225,6 @@
 
         .chat-input-area { display: flex; gap: 12px; align-items: flex-end; }
         
-        /* Dynamische Textarea OHNE sichtbare Scrollbar */
         .chat-input { 
             flex: 1; 
             border: 2px solid var(--border-color); 
@@ -250,14 +239,10 @@
             min-height: 48px; 
             max-height: 220px; 
             line-height: 1.4;
-            /* Scrollbar verbergen */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
         }
-        /* Scrollbar verbergen (Chrome/Safari/Webkit) */
-        .chat-input::-webkit-scrollbar {
-            display: none;
-        }
+        .chat-input::-webkit-scrollbar { display: none; }
 
         .chat-input:focus { border-color: var(--primary); background: var(--card-bg); box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.15); }
         .chat-container.is-temp-mode .chat-input:focus { border-color: var(--temp-accent); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); }
@@ -267,30 +252,33 @@
         .file-upload-badge.active { display: inline-flex; }
         .file-preview-img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; }
 
-        .btn { border: none; cursor: pointer; font-weight: 700; border-radius: var(--radius-md); display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; height: 48px; }
+        .btn { border: none; cursor: pointer; font-weight: 700; border-radius: var(--radius-md); display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; height: 44px; }
         .btn-primary { background: var(--primary); color: white; padding: 0 20px; font-size: 14px; box-shadow: 0 6px 20px rgba(255, 85, 0, 0.35); }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
         
-        .chat-container.is-temp-mode .btn-primary {
-            background: var(--temp-accent);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
-        }
-        .chat-container.is-temp-mode .btn-primary:hover {
-            background: #7C3AED;
-        }
+        .chat-container.is-temp-mode .btn-primary { background: var(--temp-accent); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35); }
+        .chat-container.is-temp-mode .btn-primary:hover { background: #7C3AED; }
 
         .btn-stop { background: #DC2626 !important; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35) !important; }
+        .btn-danger { background: #DC2626; color: white; }
+        .btn-danger:hover { background: #B91C1C; }
+        .btn-danger:disabled { background: #9CA3AF; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 2px solid var(--border-color); padding: 0 16px; font-size: 13px; }
         .btn-secondary:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
 
         .modal-overlay { position: fixed; inset: 0; background: rgba(11, 15, 23, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 200; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { background: var(--card-bg); color: var(--text-main); padding: 32px; border-radius: var(--radius-xl); max-width: 440px; width: 90%; box-shadow: var(--shadow-pop); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); text-align: center; border: 1px solid var(--border-color); }
+        .modal-card { background: var(--card-bg); color: var(--text-main); padding: 32px; border-radius: var(--radius-xl); max-width: 440px; width: 90%; box-shadow: var(--shadow-pop); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); text-align: center; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
         .modal-overlay.active .modal-card { transform: scale(1); }
         .modal-input { width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); background: var(--bg-color); color: var(--text-main); border-radius: var(--radius-md); margin-bottom: 12px; outline: none; font-size: 14px; }
         .modal-input:focus { border-color: var(--primary); }
-        .modal-error { color: #DC2626; font-size: 13px; margin-bottom: 12px; display: none; font-weight: 600; }
+        .modal-error { color: #DC2626; font-size: 13px; margin-bottom: 12px; display: none; font-weight: 600; text-align: left; }
+        .modal-success { color: #16A34A; font-size: 13px; margin-bottom: 12px; display: none; font-weight: 600; text-align: left; }
+
+        .setting-group { text-align: left; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
+        .setting-group:last-child { border-bottom: none; }
+        .setting-label { font-size: 13px; font-weight: 700; margin-bottom: 6px; display: block; }
 
         .chat-loader { position: absolute; inset: 0; background: var(--card-bg); opacity: 0.8; backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
         .chat-loader.active { opacity: 1; pointer-events: auto; }
@@ -302,7 +290,6 @@
 </head>
 <body>
 
-    <!-- Ganz oben platziertes Banner -->
     <div class="top-disclaimer-bar">
         <span>ko-07 ist eine KI und kann Fehler machen.</span>
         <span>|</span>
@@ -433,25 +420,67 @@
         </div>
     </div>
 
+    <!-- ERWEITERTES ACCOUNT MODAL -->
     <div class="modal-overlay" id="accountModal" onclick="handleOutsideModalClick(event, 'accountModal')">
         <div class="modal-card" style="text-align: left;">
-            <h2 style="margin-bottom: 20px; text-align: center;">Einstellungen</h2>
+            <h2 style="margin-bottom: 20px; text-align: center;">Konto-Einstellungen</h2>
             <div class="modal-error" id="accountError"></div>
+            <div class="modal-success" id="accountSuccess"></div>
             
             <div style="margin-bottom: 16px; padding: 12px; background: var(--bg-color); border-radius: 12px; border: 1px solid var(--border-color);">
-                <span style="font-size: 12px; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 4px;">KONTO-STATUS</span>
-                <strong id="accUserDisplay" style="font-size: 14px;">Nicht angemeldet (Gast)</strong>
+                <span style="font-size: 11px; color: var(--text-muted); font-weight: 800; display: block; margin-bottom: 2px;">E-MAIL ADRESSE</span>
+                <strong id="accUserDisplay" style="font-size: 13.5px; word-break: break-all;">Nicht angemeldet (Gast)</strong>
             </div>
 
-            <div style="margin-bottom: 20px;">
-                <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 8px;">Erscheinungsbild</label>
+            <div id="authRequiredSettings">
+                <div class="setting-group">
+                    <label class="setting-label">Anzeigename ändern</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="accountNameInput" placeholder="Dein Name" class="modal-input" style="margin-bottom:0;">
+                        <button class="btn btn-secondary" onclick="updateProfileName()">Speichern</button>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Passwort ändern</label>
+                    <input type="password" id="newPasswordInput" placeholder="Neues Passwort" class="modal-input">
+                    <button class="btn btn-secondary" style="width: 100%;" onclick="updateAccountPassword()">Passwort aktualisieren</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Erscheinungsbild</label>
                 <button class="btn btn-secondary" style="width: 100%; justify-content: space-between;" onclick="toggleTheme()">
                     <span>Theme wechseln</span>
                     <i data-lucide="sun-moon"></i>
                 </button>
             </div>
 
-            <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="closeModal('accountModal')">Fertig</button>
+            <div id="dangerZoneGroup" class="setting-group" style="border-bottom: none; margin-bottom: 0;">
+                <label class="setting-label" style="color: #DC2626;">Gefahrenzone</label>
+                <button class="btn btn-danger" style="width: 100%;" onclick="openDeleteAccountModal()">
+                    <i data-lucide="trash-2"></i> Account dauerhaft löschen
+                </button>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" onclick="closeModal('accountModal')">Fertig</button>
+        </div>
+    </div>
+
+    <!-- BESTÄTIGUNGS-MODAL: ACCOUNT LÖSCHEN -->
+    <div class="modal-overlay" id="deleteAccountModal" onclick="handleOutsideModalClick(event, 'deleteAccountModal')">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 12px; color: #DC2626;">Account wirklich löschen?</h2>
+            <p style="color: var(--text-muted); font-size: 13.5px; margin-bottom: 16px; text-align: left;">
+                Diese Aktion löscht deinen Account und alle gespeicherten Daten unwiderruflich.<br><br>
+                Gib zur Bestätigung deinen Namen bzw. E-Mail (<strong id="deleteConfirmTargetText"></strong>) ein:
+            </p>
+            <div class="modal-error" id="deleteAccountError"></div>
+            <input type="text" id="deleteConfirmInput" placeholder="Bestätigungstext eingeben" class="modal-input" oninput="validateDeleteInput()">
+            <button class="btn btn-danger" id="confirmDeleteAccountBtn" style="width: 100%; margin-top: 8px;" disabled onclick="executeAccountDeletion()">
+                Ich verstehe die Folgen, Account löschen
+            </button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('deleteAccountModal')">Abbrechen</button>
         </div>
     </div>
 
@@ -514,7 +543,6 @@
       }
     </script>
 
-    <!-- FIREBASE SDK SKRIPTE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
@@ -524,9 +552,12 @@
             signOut, 
             onAuthStateChanged,
             GoogleAuthProvider,
-            signInWithPopup
+            signInWithPopup,
+            updateProfile,
+            updatePassword,
+            deleteUser
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { GoogleGenAI } from "@google/genai";
 
         lucide.createIcons();
@@ -566,6 +597,7 @@
         let isTempChat = false;
         let tempChatObj = null;
         let attachedFile = null;
+        let expectedDeleteConfirmationText = "";
 
         let currentAbortController = null;
         let isGenerating = false;
@@ -594,7 +626,6 @@
         };
         marked.setOptions({ renderer });
 
-        // Auth Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -1093,16 +1124,116 @@
             }
         };
 
+        // KONTO-EINSTELLUNGEN LOGIK
         window.openAccountModal = function() {
             const display = document.getElementById('accUserDisplay');
+            const nameInput = document.getElementById('accountNameInput');
+            const authSettings = document.getElementById('authRequiredSettings');
+            const dangerZone = document.getElementById('dangerZoneGroup');
+
+            document.getElementById('accountError').style.display = 'none';
+            document.getElementById('accountSuccess').style.display = 'none';
+
             if (currentUser) {
                 display.innerText = currentUser.email;
+                nameInput.value = currentUser.displayName || currentUser.email.split('@')[0];
+                authSettings.style.display = 'block';
+                dangerZone.style.display = 'block';
             } else {
                 display.innerText = "Nicht angemeldet (Gast-Modus)";
+                authSettings.style.display = 'none';
+                dangerZone.style.display = 'none';
             }
-            document.getElementById('accountError').style.display = 'none';
+
             document.getElementById('accountModal').classList.add('active');
             closeProfileDropdown();
+        };
+
+        window.updateProfileName = async function() {
+            const newName = document.getElementById('accountNameInput').value.trim();
+            const err = document.getElementById('accountError');
+            const succ = document.getElementById('accountSuccess');
+            err.style.display = 'none'; succ.style.display = 'none';
+
+            if (!newName) return;
+
+            try {
+                await updateProfile(currentUser, { displayName: newName });
+                updateAuthHeader();
+                succ.innerText = "Name erfolgreich geändert.";
+                succ.style.display = 'block';
+            } catch (error) {
+                err.innerText = error.message;
+                err.style.display = 'block';
+            }
+        };
+
+        window.updateAccountPassword = async function() {
+            const newPassword = document.getElementById('newPasswordInput').value.trim();
+            const err = document.getElementById('accountError');
+            const succ = document.getElementById('accountSuccess');
+            err.style.display = 'none'; succ.style.display = 'none';
+
+            if (!newPassword || newPassword.length < 6) {
+                err.innerText = "Das Passwort muss mindestens 6 Zeichen lang sein.";
+                err.style.display = 'block';
+                return;
+            }
+
+            try {
+                await updatePassword(currentUser, newPassword);
+                document.getElementById('newPasswordInput').value = '';
+                succ.innerText = "Passwort erfolgreich geändert.";
+                succ.style.display = 'block';
+            } catch (error) {
+                err.innerText = error.message.includes("requires-recent-login")
+                    ? "Bitte melde dich erneut an, um das Passwort aus Sicherheitsgründen zu ändern."
+                    : error.message;
+                err.style.display = 'block';
+            }
+        };
+
+        // ACCOUNT LÖSCHEN MIT BESTÄTIGUNG
+        window.openDeleteAccountModal = function() {
+            if (!currentUser) return;
+
+            expectedDeleteConfirmationText = currentUser.displayName || currentUser.email;
+            document.getElementById('deleteConfirmTargetText').innerText = expectedDeleteConfirmationText;
+            document.getElementById('deleteConfirmInput').value = '';
+            document.getElementById('confirmDeleteAccountBtn').disabled = true;
+            document.getElementById('deleteAccountError').style.display = 'none';
+
+            closeModal('accountModal');
+            document.getElementById('deleteAccountModal').classList.add('active');
+        };
+
+        window.validateDeleteInput = function() {
+            const val = document.getElementById('deleteConfirmInput').value.trim();
+            const btn = document.getElementById('confirmDeleteAccountBtn');
+            btn.disabled = (val !== expectedDeleteConfirmationText);
+        };
+
+        window.executeAccountDeletion = async function() {
+            if (!currentUser) return;
+            const err = document.getElementById('deleteAccountError');
+            err.style.display = 'none';
+
+            try {
+                // Cloud Firestore Dokument des Nutzers entfernen
+                await deleteDoc(doc(db, "users", currentUser.uid));
+                // Auth User löschen
+                await deleteUser(currentUser);
+
+                closeModal('deleteAccountModal');
+                chats = [];
+                projects = [];
+                startNewChat();
+            } catch (error) {
+                err.innerText = error.message.includes("requires-recent-login")
+                    ? "Sicherheits-Timeout: Bitte melde dich ab und neu an, um deinen Account zu löschen."
+                    : error.message;
+                err.style.display = 'block';
+            }
         };
 
         window.toggleDropdown = function(dropdownId) {
@@ -1231,7 +1362,7 @@
                 container.innerHTML = ''; 
                 logoutBtn.style.display = 'flex';
 
-                const name = currentUser.email.split('@')[0];
+                const name = currentUser.displayName || currentUser.email.split('@')[0];
                 document.getElementById('sidebarUserName').innerText = name;
                 document.getElementById('sidebarUserInitials').innerText = name.charAt(0).toUpperCase();
             } else {
