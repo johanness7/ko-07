@@ -30,6 +30,10 @@
             --radius-md: 14px;
             --header-bg: rgba(255, 255, 255, 0.85);
             --code-bg: #1e1e1e;
+            
+            /* Styles für temporären Chat */
+            --temp-accent: #8B5CF6;
+            --temp-bg-light: #F5F3FF;
         }
 
         /* Dark Theme */
@@ -46,6 +50,7 @@
             --shadow-pop: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
             --header-bg: rgba(21, 29, 42, 0.85);
             --code-bg: #090D14;
+            --temp-bg-light: rgba(139, 92, 246, 0.15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -102,7 +107,7 @@
 
         .header-right { display: flex; align-items: center; gap: 12px; }
         .temp-chat-btn { display: flex; align-items: center; justify-content: center; padding: 8px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); cursor: pointer; transition: all 0.2s ease; }
-        .temp-chat-btn:hover, .temp-chat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .temp-chat-btn:hover { background: var(--temp-bg-light); color: var(--temp-accent); border-color: var(--temp-accent); }
 
         .auth-buttons { display: flex; gap: 8px; align-items: center; }
 
@@ -148,6 +153,29 @@
         .profile-dropdown.active { display: flex; }
 
         .chat-container { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-xl); display: flex; flex-direction: column; box-shadow: var(--shadow-lg); overflow: hidden; position: relative; }
+        
+        /* Visuelles Styling für temporäre Chats */
+        .chat-container.is-temp-mode {
+            border: 2px dashed var(--temp-accent);
+        }
+        
+        .temp-notice-banner {
+            display: none;
+            background: var(--temp-bg-light);
+            color: var(--temp-accent);
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 1px dashed var(--temp-accent);
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .chat-container.is-temp-mode .temp-notice-banner {
+            display: flex;
+        }
+
         .chat-messages { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
 
         .message { display: flex; gap: 14px; max-width: 88%; animation: fadeIn 0.3s ease-out forwards; }
@@ -155,6 +183,13 @@
         .message.user { align-self: flex-end; flex-direction: row-reverse; }
         .avatar { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
         .message.bot .avatar { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3); }
+        
+        /* Avatar im temporären Modus */
+        .chat-container.is-temp-mode .message.bot .avatar {
+            background: var(--temp-accent);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
         .message.user .avatar { background: var(--text-main); color: var(--card-bg); }
 
         .bubble { padding: 14px 20px; border-radius: 20px; font-size: 15px; line-height: 1.6; font-weight: 500; word-break: break-word; }
@@ -164,6 +199,7 @@
         .bubble ul, .bubble ol { margin-left: 18px; margin-bottom: 8px; }
 
         .message.bot .bubble { background: var(--bg-color); color: var(--text-main); border-top-left-radius: 4px; }
+        .chat-container.is-temp-mode .message.bot .bubble { background: var(--temp-bg-light); }
         .message.user .bubble { background: var(--primary); color: white; border-top-right-radius: 4px; }
 
         .chat-image-attachment { max-width: 280px; max-height: 200px; border-radius: 12px; margin-bottom: 8px; display: block; object-fit: cover; border: 2px solid rgba(255,255,255,0.2); }
@@ -183,6 +219,10 @@
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%) scale(1.05);
             width: 90%; max-width: 680px; border: 2px solid var(--primary); border-radius: 20px; box-shadow: var(--shadow-pop);
             animation: centerPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; background: var(--card-bg);
+        }
+        
+        .chat-container.initial-state.is-temp-mode .chat-input-wrapper {
+            border-color: var(--temp-accent);
         }
 
         @keyframes centerPop {
@@ -220,6 +260,7 @@
         }
 
         .chat-input:focus { border-color: var(--primary); background: var(--card-bg); box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.15); }
+        .chat-container.is-temp-mode .chat-input:focus { border-color: var(--temp-accent); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); }
         .chat-input:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .file-upload-badge { display: none; align-items: center; gap: 10px; background: var(--primary-light); color: var(--primary); padding: 8px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 10px; width: fit-content; border: 1px solid rgba(255,85,0,0.2); }
@@ -229,6 +270,15 @@
         .btn { border: none; cursor: pointer; font-weight: 700; border-radius: var(--radius-md); display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; height: 48px; }
         .btn-primary { background: var(--primary); color: white; padding: 0 20px; font-size: 14px; box-shadow: 0 6px 20px rgba(255, 85, 0, 0.35); }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        
+        .chat-container.is-temp-mode .btn-primary {
+            background: var(--temp-accent);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+        }
+        .chat-container.is-temp-mode .btn-primary:hover {
+            background: #7C3AED;
+        }
+
         .btn-stop { background: #DC2626 !important; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35) !important; }
 
         .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 2px solid var(--border-color); padding: 0 16px; font-size: 13px; }
@@ -280,7 +330,7 @@
         </div>
 
         <div class="header-right">
-            <button class="temp-chat-btn" id="tempChatToggle" onclick="toggleTempChat()" title="Temporärer Chat">
+            <button class="temp-chat-btn" id="tempChatToggle" onclick="startTempChat()" title="Neuer temporärer Chat">
                 <i data-lucide="ghost"></i>
             </button>
             <div class="auth-buttons" id="authContainer">
@@ -326,6 +376,11 @@
         </aside>
 
         <section class="chat-container initial-state" id="chatContainer">
+            <div class="temp-notice-banner">
+                <i data-lucide="ghost" style="width: 14px; height: 14px;"></i>
+                <span>Temporärer Chat – dieser Verlauf wird beim Verlassen nicht gespeichert</span>
+            </div>
+
             <div class="chat-loader" id="chatLoader">
                 <div class="spinner"></div>
             </div>
@@ -333,7 +388,7 @@
             <div class="chat-messages" id="chatBox"></div>
 
             <div class="chat-input-wrapper">
-                <div class="welcome-text">Worüber sprechen wir heute? 🚀</div>
+                <div class="welcome-text" id="welcomeText">Worüber sprechen wir heute? 🚀</div>
                 
                 <div class="file-upload-badge" id="fileBadge">
                     <img id="filePreviewThumb" class="file-preview-img" style="display:none;" alt="Preview">
@@ -509,6 +564,7 @@
         let targetChatId = null;
         let targetProjectId = null;
         let isTempChat = false;
+        let tempChatObj = null;
         let attachedFile = null;
 
         let currentAbortController = null;
@@ -545,7 +601,6 @@
                 await loadUserDataCloud();
             } else {
                 currentUser = null;
-                // Kein lokales Speichern mehr
                 chats = [];
                 projects = [];
             }
@@ -572,7 +627,6 @@
             renderHistory();
             if (isTempChat) return;
             
-            // Speichert NUR, wenn ein Nutzer angemeldet ist
             if (currentUser) {
                 try {
                     await setDoc(doc(db, "users", currentUser.uid), {
@@ -589,17 +643,19 @@
             document.getElementById('sidebar').classList.toggle('collapsed');
         };
 
-        window.toggleTempChat = function() {
-            isTempChat = !isTempChat;
-            const btn = document.getElementById('tempChatToggle');
-            btn.classList.toggle('active', isTempChat);
-
+        window.startTempChat = function() {
+            isTempChat = true;
             currentChatId = Date.now();
-            window.tempChatObj = { id: currentChatId, messages: [], isThinking: false };
+            tempChatObj = { id: currentChatId, messages: [], isThinking: false };
             
-            document.getElementById('chatContainer').classList.add('initial-state');
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.classList.add('initial-state', 'is-temp-mode');
+            document.getElementById('welcomeText').innerText = "Temporärer Chat gestartet 👻";
+
+            triggerLoader();
             renderMessages();
             renderHistory();
+            document.getElementById('userInput').focus();
         };
 
         window.toggleTheme = function() {
@@ -719,7 +775,7 @@
         function getCurrentChatObj() {
             return !isTempChat 
                 ? chats.find(c => c.id === currentChatId) 
-                : window.tempChatObj;
+                : tempChatObj;
         }
 
         window.sendMessage = async function() {
@@ -732,17 +788,15 @@
 
             document.getElementById('chatContainer').classList.remove('initial-state');
 
-            if (!currentChatId) {
+            if (!currentChatId && !isTempChat) {
                 currentChatId = Date.now();
-                if (!isTempChat) {
-                    chats.unshift({ 
-                        id: currentChatId, 
-                        title: (messageText || "Bild-Anhang").substring(0, 22) + "...", 
-                        projectId: currentProjectId,
-                        messages: [],
-                        isThinking: false
-                    });
-                }
+                chats.unshift({ 
+                    id: currentChatId, 
+                    title: (messageText || "Bild-Anhang").substring(0, 22) + "...", 
+                    projectId: currentProjectId,
+                    messages: [],
+                    isThinking: false
+                });
             }
 
             const targetChat = getCurrentChatObj();
@@ -803,11 +857,16 @@
         };
 
         window.startNewChat = function(projectId = null) {
+            isTempChat = false;
+            tempChatObj = null;
             currentChatId = null;
             currentProjectId = projectId;
-            if (isTempChat) window.tempChatObj = { id: Date.now(), messages: [], isThinking: false };
 
-            document.getElementById('chatContainer').classList.add('initial-state');
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.classList.remove('is-temp-mode');
+            chatContainer.classList.add('initial-state');
+            document.getElementById('welcomeText').innerText = "Worüber sprechen wir heute? 🚀";
+
             triggerLoader();
             renderHistory();
             renderMessages();
@@ -834,8 +893,10 @@
                         ? marked.parse(msg.text) 
                         : `<p>${escapeHTML(msg.text)}</p>`;
 
+                    const botIcon = isTempChat ? '<i data-lucide="ghost" style="width: 20px; height: 20px;"></i>' : '07';
+
                     msgEl.innerHTML = `
-                        <div class="avatar">${msg.sender === 'bot' ? '07' : 'DU'}</div>
+                        <div class="avatar">${msg.sender === 'bot' ? botIcon : 'DU'}</div>
                         <div class="bubble" ${bgStyle}>
                             ${imageHTML}
                             ${formattedContent}
@@ -848,8 +909,9 @@
             if (currentChat.isThinking) {
                 const loadingMsg = document.createElement('div');
                 loadingMsg.className = 'message bot';
+                const botIcon = isTempChat ? '<i data-lucide="ghost" style="width: 20px; height: 20px;"></i>' : '07';
                 loadingMsg.innerHTML = `
-                    <div class="avatar">07</div>
+                    <div class="avatar">${botIcon}</div>
                     <div class="bubble">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <img src="logo.png" style="width:20px; animation:spin 1s linear infinite;" alt="">
@@ -1059,8 +1121,11 @@
         window.loadChat = function(id) {
             currentChatId = id;
             isTempChat = false;
-            document.getElementById('tempChatToggle').classList.remove('active');
-            document.getElementById('chatContainer').classList.remove('initial-state');
+            tempChatObj = null;
+            
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.classList.remove('is-temp-mode');
+            chatContainer.classList.remove('initial-state');
             
             const targetChat = getCurrentChatObj();
             updateSendButtonState(targetChat ? targetChat.isThinking : false);
