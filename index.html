@@ -863,7 +863,7 @@
                 if (!ai) throw new Error("Bitte trage deinen API-Key oben im JavaScript-Code ein.");
 
                 const response = await ai.models.generateContent({
-                    model: 'gemini-3.6-flash',
+                    model: 'gemini-1.5-flash-8b',
                     contents: messageText,
                     config: { systemInstruction: SYSTEM_INSTRUCTION }
                 });
