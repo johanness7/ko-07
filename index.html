@@ -28,23 +28,24 @@
             --shadow-pop: 0 25px 50px -12px rgba(255, 85, 0, 0.3);
             --radius-xl: 24px;
             --radius-md: 14px;
-            --header-bg: rgba(255, 255, 255, 0.7);
-            --code-bg: #282c34;
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --code-bg: #1e1e1e;
         }
 
+        /* Verfeinertes Dark Theme */
         [data-theme="dark"] {
             --primary: #FF5500;
             --primary-hover: #FF6A1A;
-            --primary-light: rgba(255, 85, 0, 0.15);
-            --bg-color: #0F172A;
-            --card-bg: #1E293B;
-            --text-main: #F8FAFC;
+            --primary-light: rgba(255, 85, 0, 0.18);
+            --bg-color: #0B0F17;
+            --card-bg: #151D2A;
+            --text-main: #F1F5F9;
             --text-muted: #94A3B8;
-            --border-color: #334155;
-            --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
-            --shadow-pop: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            --header-bg: rgba(30, 41, 59, 0.7);
-            --code-bg: #0F172A;
+            --border-color: #263346;
+            --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.7);
+            --shadow-pop: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            --header-bg: rgba(21, 29, 42, 0.85);
+            --code-bg: #090D14;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -53,8 +54,8 @@
         .glow-bg {
             position: fixed; inset: 0; width: 100vw; height: 100vh;
             background: 
-                radial-gradient(circle at 10% 10%, rgba(255, 85, 0, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(255, 120, 0, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 10% 10%, rgba(255, 85, 0, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(255, 120, 0, 0.08) 0%, transparent 50%);
             z-index: -1; pointer-events: none;
         }
 
@@ -117,7 +118,7 @@
         .dropdown-item.delete { color: #DC2626; }
         .dropdown-item.delete:hover { background: rgba(220, 38, 38, 0.1); }
 
-        /* Sidebar Bottom Profile */
+        /* Sidebar Bottom Profile (Immer sichtbar) */
         .sidebar-footer { border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 12px; position: relative; }
         .profile-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: var(--radius-md); background: var(--bg-color); border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s ease; color: var(--text-main); }
         .profile-btn:hover { border-color: var(--primary); background: var(--primary-light); }
@@ -125,7 +126,6 @@
         .profile-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
         .profile-name { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Dropdown UPWARDS for Profile */
         .profile-dropdown { position: absolute; bottom: 100%; left: 0; width: 100%; margin-bottom: 8px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: var(--shadow-pop); display: none; flex-direction: column; overflow: hidden; z-index: 105; }
         .profile-dropdown.active { display: flex; }
 
@@ -147,6 +147,9 @@
 
         .message.bot .bubble { background: var(--bg-color); color: var(--text-main); border-top-left-radius: 4px; }
         .message.user .bubble { background: var(--primary); color: white; border-top-right-radius: 4px; }
+
+        /* Bildanzeige in Chat-Nachricht */
+        .chat-image-attachment { max-width: 280px; max-height: 200px; border-radius: 12px; margin-bottom: 8px; display: block; object-fit: cover; border: 2px solid rgba(255,255,255,0.2); }
 
         .code-container { margin: 10px 0; border-radius: 12px; overflow: hidden; background: var(--code-bg); border: 1px solid var(--border-color); }
         .code-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 6px 12px; font-size: 12px; color: var(--text-muted); font-family: monospace; }
@@ -173,25 +176,43 @@
         .welcome-text { display: none; text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 24px; color: var(--text-main); }
         .chat-container.initial-state .welcome-text { display: block; }
 
-        .chat-input-area { display: flex; gap: 12px; align-items: center; }
-        .chat-input { flex: 1; border: 2px solid var(--border-color); background: var(--bg-color); color: var(--text-main); padding: 14px 18px; border-radius: var(--radius-md); font-size: 15px; outline: none; transition: all 0.2s ease; }
+        .chat-input-area { display: flex; gap: 12px; align-items: flex-end; }
+        
+        /* Dynamisch wachsende Textarea */
+        .chat-input { 
+            flex: 1; 
+            border: 2px solid var(--border-color); 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            padding: 12px 16px; 
+            border-radius: var(--radius-md); 
+            font-size: 15px; 
+            outline: none; 
+            transition: border-color 0.2s ease, background 0.2s ease;
+            resize: none; 
+            min-height: 48px; 
+            max-height: 180px; 
+            line-height: 1.4;
+        }
         .chat-input:focus { border-color: var(--primary); background: var(--card-bg); box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.15); }
         .chat-input:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .file-upload-badge { display: none; align-items: center; gap: 8px; background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+        /* Vorschau-Badge für angehängte Bilder/Dateien */
+        .file-upload-badge { display: none; align-items: center; gap: 10px; background: var(--primary-light); color: var(--primary); padding: 8px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 10px; width: fit-content; border: 1px solid rgba(255,85,0,0.2); }
         .file-upload-badge.active { display: inline-flex; }
+        .file-preview-img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; }
 
-        .btn { border: none; cursor: pointer; font-weight: 700; border-radius: var(--radius-md); display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; }
-        .btn-primary { background: var(--primary); color: white; padding: 12px 20px; font-size: 14px; box-shadow: 0 6px 20px rgba(255, 85, 0, 0.35); }
+        .btn { border: none; cursor: pointer; font-weight: 700; border-radius: var(--radius-md); display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; height: 48px; }
+        .btn-primary { background: var(--primary); color: white; padding: 0 20px; font-size: 14px; box-shadow: 0 6px 20px rgba(255, 85, 0, 0.35); }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
         .btn-stop { background: #DC2626 !important; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35) !important; }
 
-        .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 2px solid var(--border-color); padding: 8px 16px; font-size: 13px; }
+        .btn-secondary { background: var(--card-bg); color: var(--text-main); border: 2px solid var(--border-color); padding: 0 16px; font-size: 13px; }
         .btn-secondary:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 200; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(11, 15, 23, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 200; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { background: var(--card-bg); color: var(--text-main); padding: 32px; border-radius: var(--radius-xl); max-width: 420px; width: 90%; box-shadow: var(--shadow-pop); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); text-align: center; border: 1px solid var(--border-color); }
+        .modal-card { background: var(--card-bg); color: var(--text-main); padding: 32px; border-radius: var(--radius-xl); max-width: 440px; width: 90%; box-shadow: var(--shadow-pop); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); text-align: center; border: 1px solid var(--border-color); }
         .modal-overlay.active .modal-card { transform: scale(1); }
         .modal-input { width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); background: var(--bg-color); color: var(--text-main); border-radius: var(--radius-md); margin-bottom: 12px; outline: none; font-size: 14px; }
         .modal-input:focus { border-color: var(--primary); }
@@ -251,8 +272,8 @@
             <div class="history-title">Chat-Verlauf & Projekte</div>
             <div class="history-list" id="historyList"></div>
 
-            <!-- Profil / Dropdown Unte Links -->
-            <div class="sidebar-footer" id="sidebarFooter" style="display: none;">
+            <!-- Profil / Dropdown Unten Links (Immer sichtbar) -->
+            <div class="sidebar-footer" id="sidebarFooter">
                 <div class="profile-dropdown" id="profileDropdown">
                     <button class="dropdown-item" onclick="toggleTheme()">
                         <i data-lucide="sun-moon"></i> Theme wechseln
@@ -260,14 +281,14 @@
                     <button class="dropdown-item" onclick="openAccountModal()">
                         <i data-lucide="settings"></i> Einstellungen
                     </button>
-                    <button class="dropdown-item delete" onclick="logout()">
+                    <button class="dropdown-item delete" id="logoutDropdownBtn" onclick="logout()" style="display:none;">
                         <i data-lucide="log-out"></i> Abmelden
                     </button>
                 </div>
                 <button class="profile-btn" onclick="toggleProfileDropdown(event)">
                     <div class="profile-info">
-                        <div class="profile-avatar" id="sidebarUserInitials">U</div>
-                        <span class="profile-name" id="sidebarUserName">Benutzer</span>
+                        <div class="profile-avatar" id="sidebarUserInitials">G</div>
+                        <span class="profile-name" id="sidebarUserName">Gast</span>
                     </div>
                     <i data-lucide="chevron-up"></i>
                 </button>
@@ -284,19 +305,21 @@
             <div class="chat-input-wrapper">
                 <div class="welcome-text">Worüber sprechen wir heute? 🚀</div>
                 
+                <!-- Dateivorschau -->
                 <div class="file-upload-badge" id="fileBadge">
-                    <i data-lucide="file"></i>
+                    <img id="filePreviewThumb" class="file-preview-img" style="display:none;" alt="Preview">
+                    <i data-lucide="file" id="fileGenericIcon"></i>
                     <span id="fileName">datei.png</span>
                     <i data-lucide="x" style="cursor:pointer;" onclick="clearFile()"></i>
                 </div>
 
                 <div class="chat-input-area">
-                    <input type="file" id="fileInput" style="display:none;" onchange="handleFileSelect(event)">
-                    <button class="icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Foto/Datei anhängen">
+                    <input type="file" id="fileInput" accept="image/*,.pdf,.txt" style="display:none;" onchange="handleFileSelect(event)">
+                    <button class="icon-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Foto/Datei anhängen" style="height: 48px; width: 48px;">
                         <i data-lucide="paperclip"></i>
                     </button>
                     
-                    <input type="text" id="userInput" class="chat-input" placeholder="Schreibe eine Nachricht..." onkeypress="handleKeyPress(event)" autofocus>
+                    <textarea id="userInput" class="chat-input" placeholder="Schreibe eine Nachricht..." onkeydown="handleKeyDown(event)" oninput="autoResizeTextarea(this)" rows="1" autofocus></textarea>
                     
                     <button class="btn btn-primary" id="actionBtn" onclick="handleChatAction()">
                         <span id="actionBtnText">Senden</span>
@@ -326,12 +349,34 @@
         </div>
     </div>
 
+    <!-- Erweiterte Account- / Systemeinstellungen -->
     <div class="modal-overlay" id="accountModal" onclick="handleOutsideModalClick(event, 'accountModal')">
-        <div class="modal-card">
-            <h2 style="margin-bottom: 20px;">Account-Einstellungen</h2>
+        <div class="modal-card" style="text-align: left;">
+            <h2 style="margin-bottom: 20px; text-align: center;">Einstellungen</h2>
             <div class="modal-error" id="accountError"></div>
-            <p style="color: var(--text-muted); font-size:14px; margin-bottom: 20px;">Eingeloggt als: <strong id="accUserDisplay"></strong></p>
-            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="closeModal('accountModal')">Schließen</button>
+            
+            <div style="margin-bottom: 16px; padding: 12px; background: var(--bg-color); border-radius: 12px; border: 1px solid var(--border-color);">
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 4px;">KONTO-STATUS</span>
+                <strong id="accUserDisplay" style="font-size: 14px;">Nicht angemeldet (Gast)</strong>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 8px;">Erscheinungsbild</label>
+                <button class="btn btn-secondary" style="width: 100%; justify-content: space-between;" onclick="toggleTheme()">
+                    <span>Theme wechseln</span>
+                    <i data-lucide="sun-moon"></i>
+                </button>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 8px;">Datenschutz & Speicher</label>
+                <button class="btn btn-secondary" style="width: 100%; justify-content: space-between; color: #DC2626; border-color: rgba(220,38,38,0.3);" onclick="clearLocalHistory()">
+                    <span>Lokalen Verlauf leeren</span>
+                    <i data-lucide="trash"></i>
+                </button>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="closeModal('accountModal')">Fertig</button>
         </div>
     </div>
 
@@ -481,8 +526,8 @@
                 await loadUserDataCloud();
             } else {
                 currentUser = null;
-                chats = [];
-                projects = [];
+                chats = JSON.parse(localStorage.getItem('ko07_local_chats') || '[]');
+                projects = JSON.parse(localStorage.getItem('ko07_local_projects') || '[]');
             }
             updateAuthHeader();
             renderHistory();
@@ -505,14 +550,20 @@
 
         async function saveAllCloud() {
             renderHistory();
-            if (isTempChat || !currentUser) return;
-            try {
-                await setDoc(doc(db, "users", currentUser.uid), {
-                    chats: chats,
-                    projects: projects
-                });
-            } catch (err) {
-                console.error("Cloud-Speicherfehler:", err);
+            if (isTempChat) return;
+            
+            if (currentUser) {
+                try {
+                    await setDoc(doc(db, "users", currentUser.uid), {
+                        chats: chats,
+                        projects: projects
+                    });
+                } catch (err) {
+                    console.error("Cloud-Speicherfehler:", err);
+                }
+            } else {
+                localStorage.setItem('ko07_local_chats', JSON.stringify(chats));
+                localStorage.setItem('ko07_local_projects', JSON.stringify(projects));
             }
         }
 
@@ -526,7 +577,7 @@
             btn.classList.toggle('active', isTempChat);
 
             currentChatId = Date.now();
-            window.tempChatObj = { id: currentChatId, messages: [] };
+            window.tempChatObj = { id: currentChatId, messages: [], isThinking: false };
             
             document.getElementById('chatContainer').classList.add('initial-state');
             renderMessages();
@@ -551,17 +602,41 @@
             if (dropdown) dropdown.classList.remove('active');
         }
 
+        // Automatisch höher werdende Textarea
+        window.autoResizeTextarea = function(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 180) + 'px';
+        };
+
         window.handleFileSelect = function(e) {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(evt) {
+                const base64Data = evt.target.result.split(',')[1];
+                const isImg = file.type.startsWith('image/');
+                
                 attachedFile = {
                     name: file.name,
                     mimeType: file.type,
-                    data: evt.target.result.split(',')[1]
+                    data: base64Data,
+                    fullDataUrl: evt.target.result,
+                    isImage: isImg
                 };
+
+                const thumb = document.getElementById('filePreviewThumb');
+                const genericIcon = document.getElementById('fileGenericIcon');
+                
+                if (isImg) {
+                    thumb.src = evt.target.result;
+                    thumb.style.display = 'block';
+                    genericIcon.style.display = 'none';
+                } else {
+                    thumb.style.display = 'none';
+                    genericIcon.style.display = 'block';
+                }
+
                 document.getElementById('fileName').innerText = file.name;
                 document.getElementById('fileBadge').classList.add('active');
             };
@@ -617,9 +692,18 @@
                 currentAbortController.abort();
                 currentAbortController = null;
             }
-            removeLoadingBubble();
+            const targetChat = getCurrentChatObj();
+            if (targetChat) targetChat.isThinking = false;
+
             updateSendButtonState(false);
+            renderMessages();
         };
+
+        function getCurrentChatObj() {
+            return !isTempChat 
+                ? chats.find(c => c.id === currentChatId) 
+                : window.tempChatObj;
+        }
 
         window.sendMessage = async function() {
             if (isGenerating) return;
@@ -636,32 +720,38 @@
                 if (!isTempChat) {
                     chats.unshift({ 
                         id: currentChatId, 
-                        title: (messageText || "DateiAnhang").substring(0, 22) + "...", 
+                        title: (messageText || "Bild-Anhang").substring(0, 22) + "...", 
                         projectId: currentProjectId,
-                        messages: [] 
+                        messages: [],
+                        isThinking: false
                     });
                 }
             }
 
-            const targetChat = !isTempChat 
-                ? chats.find(c => c.id === currentChatId) 
-                : window.tempChatObj;
+            const targetChat = getCurrentChatObj();
 
-            targetChat.messages.push({ sender: 'user', text: messageText });
+            const userMsg = { 
+                sender: 'user', 
+                text: messageText,
+                image: attachedFile && attachedFile.isImage ? attachedFile.fullDataUrl : null
+            };
+
+            targetChat.messages.push(userMsg);
+            targetChat.isThinking = true;
+
             saveAllCloud();
             renderMessages();
 
             input.value = '';
+            input.style.height = '48px';
             const currentAttached = attachedFile;
             clearFile();
 
-            showLoadingBubble();
             updateSendButtonState(true);
-
             currentAbortController = new AbortController();
 
             try {
-                if (!ai) throw new Error("API-Key fehlt!");
+                if (!ai) throw new Error("API-Key nicht konfiguriert.");
 
                 let contents = [messageText];
                 if (currentAttached) {
@@ -676,14 +766,14 @@
                     config: { systemInstruction: SYSTEM_INSTRUCTION }
                 }, { signal: currentAbortController.signal });
 
-                removeLoadingBubble();
+                targetChat.isThinking = false;
                 targetChat.messages.push({ sender: 'bot', text: response.text });
                 saveAllCloud();
 
                 if (currentChatId === targetChat.id) renderMessages();
 
             } catch (error) {
-                removeLoadingBubble();
+                targetChat.isThinking = false;
                 if (error.name !== 'AbortError') {
                     targetChat.messages.push({ sender: 'bot', text: `Fehler: ${error.message}`, error: true });
                     saveAllCloud();
@@ -698,7 +788,7 @@
         window.startNewChat = function(projectId = null) {
             currentChatId = null;
             currentProjectId = projectId;
-            if (isTempChat) window.tempChatObj = { id: Date.now(), messages: [] };
+            if (isTempChat) window.tempChatObj = { id: Date.now(), messages: [], isThinking: false };
 
             document.getElementById('chatContainer').classList.add('initial-state');
             triggerLoader();
@@ -711,27 +801,48 @@
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = '';
 
-            const currentChat = !isTempChat 
-                ? chats.find(c => c.id === currentChatId) 
-                : window.tempChatObj;
+            const currentChat = getCurrentChatObj();
 
-            if (!currentChat || !currentChat.messages || currentChat.messages.length === 0) return;
+            if (!currentChat) return;
 
-            currentChat.messages.forEach(msg => {
-                const msgEl = document.createElement('div');
-                msgEl.className = `message ${msg.sender}`;
-                const bgStyle = msg.error ? 'style="background: #FEE2E2; color: #991B1B;"' : '';
-                
-                const formattedContent = msg.sender === 'bot' && !msg.error 
-                    ? marked.parse(msg.text) 
-                    : `<p>${escapeHTML(msg.text)}</p>`;
+            if (currentChat.messages) {
+                currentChat.messages.forEach(msg => {
+                    const msgEl = document.createElement('div');
+                    msgEl.className = `message ${msg.sender}`;
+                    const bgStyle = msg.error ? 'style="background: #FEE2E2; color: #991B1B;"' : '';
+                    
+                    let imageHTML = msg.image ? `<img src="${msg.image}" class="chat-image-attachment" alt="Attached Image">` : '';
 
-                msgEl.innerHTML = `
-                    <div class="avatar">${msg.sender === 'bot' ? '07' : 'DU'}</div>
-                    <div class="bubble" ${bgStyle}>${formattedContent}</div>
+                    const formattedContent = msg.sender === 'bot' && !msg.error 
+                        ? marked.parse(msg.text) 
+                        : `<p>${escapeHTML(msg.text)}</p>`;
+
+                    msgEl.innerHTML = `
+                        <div class="avatar">${msg.sender === 'bot' ? '07' : 'DU'}</div>
+                        <div class="bubble" ${bgStyle}>
+                            ${imageHTML}
+                            ${formattedContent}
+                        </div>
+                    `;
+                    chatBox.appendChild(msgEl);
+                });
+            }
+
+            // Rendere persistenten "Denkt nach..." Status, falls der Chat reingeladen wird während die KI rechnet
+            if (currentChat.isThinking) {
+                const loadingMsg = document.createElement('div');
+                loadingMsg.className = 'message bot';
+                loadingMsg.innerHTML = `
+                    <div class="avatar">07</div>
+                    <div class="bubble">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <img src="logo.png" style="width:20px; animation:spin 1s linear infinite;" alt="">
+                            <em>Denkt kurz nach...</em>
+                        </div>
+                    </div>
                 `;
-                chatBox.appendChild(msgEl);
-            });
+                chatBox.appendChild(loadingMsg);
+            }
 
             document.querySelectorAll('pre code').forEach((block) => hljs.highlightElement(block));
             lucide.createIcons();
@@ -905,11 +1016,26 @@
         };
 
         window.openAccountModal = function() {
-            if (!currentUser) return;
-            document.getElementById('accUserDisplay').innerText = currentUser.email;
+            const display = document.getElementById('accUserDisplay');
+            if (currentUser) {
+                display.innerText = currentUser.email;
+            } else {
+                display.innerText = "Nicht angemeldet (Gast-Modus)";
+            }
             document.getElementById('accountError').style.display = 'none';
             document.getElementById('accountModal').classList.add('active');
             closeProfileDropdown();
+        };
+
+        window.clearLocalHistory = function() {
+            if (confirm("Möchtest du wirklich deinen lokalen Verlauf leeren?")) {
+                chats = [];
+                projects = [];
+                localStorage.removeItem('ko07_local_chats');
+                localStorage.removeItem('ko07_local_projects');
+                startNewChat();
+                closeModal('accountModal');
+            }
         };
 
         window.toggleDropdown = function(dropdownId) {
@@ -930,33 +1056,15 @@
             isTempChat = false;
             document.getElementById('tempChatToggle').classList.remove('active');
             document.getElementById('chatContainer').classList.remove('initial-state');
+            
+            const targetChat = getCurrentChatObj();
+            updateSendButtonState(targetChat ? targetChat.isThinking : false);
+
             triggerLoader();
             renderHistory();
             renderMessages();
             document.getElementById('userInput').focus();
         };
-
-        function showLoadingBubble() {
-            const chatBox = document.getElementById('chatBox');
-            const loadingMsg = document.createElement('div');
-            loadingMsg.className = 'message bot';
-            loadingMsg.id = 'loading-bubble';
-            loadingMsg.innerHTML = `
-                <div class="avatar">07</div>
-                <div class="bubble">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <img src="logo.png" style="width:20px; animation:spin 1s linear infinite;" alt="">
-                        <em>Denkt kurz nach...</em>
-                    </div>
-                </div>
-            `;
-            chatBox.appendChild(loadingMsg);
-        }
-
-        function removeLoadingBubble() {
-            const loader = document.getElementById('loading-bubble');
-            if (loader) loader.remove();
-        }
 
         function openRenameModal(id) {
             targetChatId = id;
@@ -1047,11 +1155,11 @@
 
         function updateAuthHeader() {
             const container = document.getElementById('authContainer');
-            const sidebarFooter = document.getElementById('sidebarFooter');
+            const logoutBtn = document.getElementById('logoutDropdownBtn');
 
             if (currentUser) {
                 container.innerHTML = ''; 
-                sidebarFooter.style.display = 'block';
+                logoutBtn.style.display = 'flex';
 
                 const name = currentUser.email.split('@')[0];
                 document.getElementById('sidebarUserName').innerText = name;
@@ -1061,7 +1169,9 @@
                     <button class="btn btn-secondary" onclick="openAuthModal('login')">Einloggen</button>
                     <button class="btn btn-primary" onclick="openAuthModal('register')">Konto erstellen</button>
                 `;
-                sidebarFooter.style.display = 'none';
+                logoutBtn.style.display = 'none';
+                document.getElementById('sidebarUserName').innerText = "Gast";
+                document.getElementById('sidebarUserInitials').innerText = "G";
             }
             lucide.createIcons();
         }
@@ -1074,8 +1184,11 @@
             if (event.target.id === modalId) closeModal(modalId);
         };
 
-        window.handleKeyPress = function(e) {
-            if (e.key === 'Enter' && !isGenerating) window.sendMessage();
+        window.handleKeyDown = function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (!isGenerating) window.sendMessage();
+            }
         };
 
         function escapeHTML(str) {
